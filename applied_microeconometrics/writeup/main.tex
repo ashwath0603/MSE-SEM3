@@ -1,0 +1,82 @@
+% =============================================================================
+% Applied Microeconometrics 2026 — Computer Assignment 1 (Panel Data)
+% Group G3
+%
+% Compiles on Overleaf as-is. Tables are \input{} from ../output/tables/,
+% written by scripts/03_analysis.do — never paste Stata output directly.
+% =============================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{natbib}
+
+\graphicspath{{../output/figures/}}
+
+\title{Determinants of Health Expenditure:\\
+       Evidence from a Modern Country-Level Panel}
+\author{Group G3 \\ Madras School of Economics}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% -----------------------------------------------------------------------------
+% Required on page 1 by the assignment brief:
+%   - names of team members
+%   - citation of the reference paper
+%   - citations of any web resources used for code/commands
+% -----------------------------------------------------------------------------
+\section*{Team}
+\begin{itemize}
+  \item \textit{Member 1 — TBD}
+  \item \textit{Member 2 — TBD}
+  \item \textit{Member 3 — TBD}
+\end{itemize}
+
+\section*{Reference Paper}
+Xu, K., Saksena, P., \& Holly, A. (2011). \textit{The Determinants of Health Expenditure:
+A Country-Level Panel Data Analysis.} World Health Organization, Geneva / Results for
+Development Institute Working Paper.
+
+\section*{Data Sources}
+\begin{itemize}
+  \item WHO Global Health Expenditure Database (GHED), SHA 2011 basis.
+        \url{https://apps.who.int/nha/database}
+  \item World Bank World Development Indicators (WDI).
+        \url{https://databank.worldbank.org/source/world-development-indicators}
+\end{itemize}
+
+\section*{Code and Command References}
+\begin{itemize}
+  \item Torres-Reyna, O. \textit{Panel Data Analysis: Fixed and Random Effects using Stata.}
+        Princeton University.
+  \item \textit{Additional references to be listed as used.}
+\end{itemize}
+
+\clearpage
+
+% -----------------------------------------------------------------------------
+\section{Objective, Data and Specification}
+\input{sections/q01}
+\input{sections/q02}
+\input{sections/q03}
+\input{sections/q04}
+\input{sections/q05}
+
+\section{Descriptive Analysis}
+\input{sections/q06}
+\input{sections/q07}
+
+\section{Estimation Results}
+\input{sections/q08}
+
+\section{Tests of Hypotheses}
+\input{sections/q09}
+
+\end{document}

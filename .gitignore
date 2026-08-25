@@ -1,0 +1,46 @@
+# --- R ---
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+.httr-oauth
+.quarto
+
+# --- Stata ---
+# Batch mode rewrites logs on every run: regenerable, never source.
+*.log
+*.smcl
+*.dta.bak
+
+# --- LaTeX build artefacts (Overleaf compiles from source) ---
+*.aux
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# --- macOS ---
+.DS_Store
+
+# --- Secrets ---
+.Renviron
+.env
+
+# --- Data policy -------------------------------------------------------------
+# Raw downloads (GHED, WDI) stay local: large, redistributable-unclear, and
+# regenerable from the source portals. Provenance is recorded in data/raw/README.md.
+#
+# The BUILT panel (data/G3.dta) IS tracked — it is the graded deliverable and
+# must survive a fresh clone.
+*/data/raw/*
+!*/data/raw/.gitkeep
+!*/data/raw/README.md
+
+# Keep output/ folders in the tree even when empty.
+!*/output/**/.gitkeep
