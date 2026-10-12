@@ -44,3 +44,8 @@
 
 # Keep output/ folders in the tree even when empty.
 !*/output/**/.gitkeep
+
+# --- Development Economics benchmark (authors' code, regenerable) -------------
+development_economics/benchmark/Code/
+development_economics/benchmark/Data/
+development_economics/benchmark/Figures/

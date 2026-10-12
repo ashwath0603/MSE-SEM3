@@ -1,0 +1,52 @@
+id,target,paper,ours,ours_pr,tol,note,status
+T3a,Table 3: living population 1990 (m),4200,4197.888941212315,4200,5,rounded to 10 m,PASS
+T3b,Table 3: living population 2015 (m),6010,6006.973461101345,6010,5,rounded to 10 m,PASS
+T3c,Table 3: HC 1990 (%),44.9,44.87209531887963,,.05,,PASS
+T3d,Table 3: HC 2015 (%),11.7,11.73963921295601,,.05,,PASS
+T3e,Table 3: PYAD 1990 (m),1886,1883.680727081497,1886,.5,paper: 4200 x 0.449 by hand,PASS
+T3f,Table 3: PYAD 2015 (m),703,705.1970119513139,703,.5,paper: 6010 x 0.117 by hand; intro says 705,PASS
+T3g,Table 3: PYPL 1990 (m),701,701.4458737895703,,.5,,PASS
+T3h,Table 3: PYPL 2015 (m),402,402.4115074301298,,.5,,PASS
+T3i,Table 3: deprived population 1990 (m),2587,2585.126600871067,2587,.5,,PASS
+T3j,Table 3: deprived population 2015 (m),1105,1107.608519381444,1105,.5,,PASS
+T3k,Table 3: reference population 1990 (m),4901,4899.334815001886,4901,.5,,PASS
+T3l,Table 3: reference population 2015 (m),6412,6409.384968531475,6412,.5,,PASS
+T3m,Table 3: GD1 1990 (%),52.8,52.76484866793232,52.78514588859417,.05,,PASS
+T3n,Table 3: GD1 2015 (%),17.2,17.28104217205758,17.2333125389894,.05,paper divides rounded rows: 1105/6412,PASS
+I1,Intro: income poor 2015 (m),705,705.1970119513139,,.5,,PASS
+S1,Life-span share of GD 1990 (%),27,27.13390800873024,,.5,p.251,PASS
+S2,"Life-span share of GD 2015 (%), 'more than 36'",36,36.33156484340342,,.5,p.251,PASS
+S3,"Life-span share of GD 2015, ahat=80 (%), 'more than 60'",60,60.35289058872358,,.5,p.251,PASS
+S4,"Under-5 deaths, share of PYPL 1990 (%), 'almost 80'",80,78.69779115037129,,2.5,"p.251, approximate",PASS
+S5,"Under-5 deaths, share of PYPL 2015 (%), 'close to 70'",70,68.45372557868252,,2.5,"p.251, approximate",PASS
+N1,Newborn mortality rate 1990 (%),6.6,6.763551680458033,,.05,p.252,DIFF
+N2,Newborn mortality rate 2015 (%),3.4,3.465146112905781,,.05,p.252,DIFF
+N3,Change in births 1990-2015 (%),2.8,3.265105406311175,,.05,p.252,DIFF
+A1,Median age at death (pooled 1990-2015),64,58,,.5,p.249; 1990 alone: 49,DIFF
+C1,Number of countries,113,113,,0,,PASS
+R1,"Average |rank change| HC->GD, all years",4.1,4.138189244383935,,.05,p.253,PASS
+R2,Average |rank change| 1990,4.4,4.920353982300885,,.05,p.253,DIFF
+R3,Average |rank change| 2015,4.9,4.389380530973451,,.05,p.253,DIFF
+R4,"Gabon rank by HC, 1993",19,19,,0,p.253,PASS
+R5,"Gabon rank by GD, 1993",38,38,,0,p.253,PASS
+R6,"Morocco rank by HC, 1993",21,21,,0,p.253,PASS
+R7,"Morocco rank by GD, 1993",32,32,,0,p.253,PASS
+R8,"Azerbaijan ranks lost, 2010",26,26,,0,largest in data: 27 (AZE 2011),PASS
+R9,"Azerbaijan ranks lost, 2014",26,26,,0,,PASS
+K1,Comoros HC change 1990-2015 (%),60,60.85172124742995,,.5,p.253,DIFF
+K2,Comoros GD change 1990-2015 (%),-23,-21.98818944943616,,.5,p.253,DIFF
+K3,Botswana HC change 1990-2001 (%),-12,-11.42332502416694,,.5,p.255,DIFF
+K4,Botswana GD change 1990-2001 (%),.7,.5438795391626394,,.05,p.255,DIFF
+K5,Botswana HC 1990 (%),33.6,33.63755,,.05,"p.226, intro",PASS
+K6,Botswana HC 2000 (%),29.5,29.42703666666668,,.05,"p.226, intro",DIFF
+V1,"Reversals HC vs GD, 5-year, gamma=1 (%)",8.4,8.418803418803419,,.05,p.255,PASS
+V2,"Reversals, gamma -> infinity (%)",26.9,26.88034188034188,,.05,p.255,PASS
+T4a,Table 4: Gabon living population (k),1043,1043.759568724462,1043,.5,,PASS
+T4b,Table 4: Gabon HC (%),5.2,5.166772,,.05,,PASS
+T4c,Table 4: Gabon PYPL (k),174,173.8850030225868,,.5,,PASS
+T4d,Table 4: Gabon reference population (k),1217,1217.644571747049,1217,.5,,PASS
+T4e,Table 4: Gabon GD1 (%),17.9,18.70937426673706,18.73459326211997,.05,authors' do-file: 1043+174 typed as 1271,DIFF
+T4f,Table 4: Morocco living population (k),26449,26448.95298258274,,.5,,PASS
+T4g,Table 4: Morocco HC (%),5.8,5.775192,,.05,,PASS
+T4h,Table 4: Morocco PYPL (k),3100,3100.318868507659,,.5,,PASS
+T4i,Table 4: Morocco GD1 (%),15.7,15.66128840183508,,.05,,PASS

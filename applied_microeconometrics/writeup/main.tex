@@ -1,82 +1,916 @@
 % =============================================================================
-% Applied Microeconometrics 2026 — Computer Assignment 1 (Panel Data)
+% Applied Microeconometrics 2026 - Computer Assignment 1 (Panel Data)
 % Group G3
 %
-% Compiles on Overleaf as-is. Tables are \input{} from ../output/tables/,
-% written by scripts/03_analysis.do — never paste Stata output directly.
+% Copy this whole file into a single Overleaf document. No \input, no
+% bibliography. The ONLY external files are the three figure PDFs, which must be
+% uploaded to the Overleaf project root alongside this file:
+%     fig1_che_vs_gdp.pdf
+%     fig2_trend_by_income.pdf
+%     fig3_disease_burden.pdf
+% Answers are filled in question by question as they are approved.
 % =============================================================================
 \documentclass[11pt,a4paper]{article}
 
 \usepackage[margin=1in]{geometry}
 \usepackage{booktabs}
+\usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{caption}
 \usepackage{float}
 \usepackage[hidelinks]{hyperref}
-\usepackage{natbib}
+\usepackage{parskip}
+\usepackage{enumitem}
 
-\graphicspath{{../output/figures/}}
+% Flat layout: no paragraph indents, lists close to the margin, so the page
+% never carries more than one level of indentation.
+\setlist{leftmargin=1.4em, labelsep=0.5em, itemsep=3pt, parsep=0pt, topsep=5pt}
 
-\title{Determinants of Health Expenditure:\\
-       Evidence from a Modern Country-Level Panel}
-\author{Group G3 \\ Madras School of Economics}
-\date{\today}
+% Questions are numbered 1 to 9 continuously across sections, matching the
+% numbering in the assignment brief, so a grader looking for "question 6" finds
+% it labelled 6 rather than 2.1.
+\newcounter{qnum}
+\newcommand{\question}[1]{\subsection*{Question \stepcounter{qnum}\theqnum.\ #1}}
 
 \begin{document}
-\maketitle
 
-% -----------------------------------------------------------------------------
-% Required on page 1 by the assignment brief:
+% =============================================================================
+% PAGE 1 - COVER PAGE.  Placeholder; contents to be supplied.
+%
+% The brief requires the following on the first page:
 %   - names of team members
 %   - citation of the reference paper
-%   - citations of any web resources used for code/commands
-% -----------------------------------------------------------------------------
-\section*{Team}
-\begin{itemize}
-  \item \textit{Member 1 — TBD}
-  \item \textit{Member 2 — TBD}
-  \item \textit{Member 3 — TBD}
-\end{itemize}
+%   - citations of any web resources used for code, commands or information
+% =============================================================================
+\begin{titlepage}
+\centering
+\vspace*{0.4in}
 
-\section*{Reference Paper}
-Xu, K., Saksena, P., \& Holly, A. (2011). \textit{The Determinants of Health Expenditure:
-A Country-Level Panel Data Analysis.} World Health Organization, Geneva / Results for
-Development Institute Working Paper.
+% --- header -----------------------------------------------------------------
+{\Large Madras School of Economics\par}
+\vspace{1.4em}
+{\large Applied Microeconometrics\par}
+\vspace{0.5em}
+{\large Computer Assignment 1\par}
 
-\section*{Data Sources}
-\begin{itemize}
-  \item WHO Global Health Expenditure Database (GHED), SHA 2011 basis.
-        \url{https://apps.who.int/nha/database}
-  \item World Bank World Development Indicators (WDI).
-        \url{https://databank.worldbank.org/source/world-development-indicators}
-\end{itemize}
+\vspace*{\fill}
 
-\section*{Code and Command References}
-\begin{itemize}
-  \item Torres-Reyna, O. \textit{Panel Data Analysis: Fixed and Random Effects using Stata.}
-        Princeton University.
-  \item \textit{Additional references to be listed as used.}
-\end{itemize}
+% --- title ------------------------------------------------------------------
+\rule{\textwidth}{1.2pt}
+\vspace{1.8em}
 
-\clearpage
+{\Huge\bfseries Determinants of\\[0.35em] Health Expenditure\par}
 
-% -----------------------------------------------------------------------------
+\vspace{1.4em}
+{\Large\itshape Evidence from a Modern Country-Level Panel\par}
+
+\vspace{1.8em}
+\rule{\textwidth}{1.2pt}
+
+\vspace*{\fill}
+
+% --- authors ----------------------------------------------------------------
+{\LARGE\bfseries Group 3\par}
+
+\vspace{1.8em}
+{\large
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+GE/2025-27/014 & Ashwath Balasubramanian \\[0.35em]
+GE/2025-27/022 & Gyavin Riju \\[0.35em]
+GE/2025-27/009 & Anirudh R Raman \\
+\end{tabular}\par}
+
+\vspace{2.4em}
+{\large\today\par}
+
+\vspace*{\fill}
+
+% --- references required on page 1 by the brief -----------------------------
+\rule{\textwidth}{0.4pt}
+\vspace{0.5em}
+
+\begin{minipage}{\textwidth}
+\footnotesize\raggedright
+
+\textbf{Reference paper.}\enspace Xu, K., Saksena, P. and Holly, A. (2011).
+\textit{The Determinants of Health Expenditure: A Country-Level Panel Data
+Analysis.} World Health Organization, Geneva, and Results for Development
+Institute.
+
+\vspace{0.7em}
+\textbf{Data sources.}\enspace World Bank, \textit{World Development
+Indicators} (\texttt{databank.worldbank.org}). World Health Organization,
+\textit{Global Health Expenditure Database} (\texttt{apps.who.int/nha/database}).
+
+\vspace{0.7em}
+\textbf{Methods and commands.}\enspace StataCorp (2025), \textit{Stata
+Longitudinal-Data/Panel-Data Reference Manual}, entry \texttt{[XT] xtsum}.
+Wooldridge, J.~M., \textit{Introductory Econometrics: A Modern Approach},
+p.~493.
+
+\end{minipage}
+
+\vspace{0.2in}
+\end{titlepage}
+
+\setcounter{page}{2}
+
+% =============================================================================
 \section{Objective, Data and Specification}
-\input{sections/q01}
-\input{sections/q02}
-\input{sections/q03}
-\input{sections/q04}
-\input{sections/q05}
 
+% -----------------------------------------------------------------------------
+% Q1
+% NOTE: deliberately contains no results from our own estimation. Those belong
+% to Sections 3 and 4. The scope of our departure belongs to Q2.
+% -----------------------------------------------------------------------------
+\question{Objective of the reference paper and the role of panel data}
+
+Xu, Saksena and Holly (2011) study what drives national health expenditure and
+how it evolves, motivated by the scarcity of evidence outside the OECD. The aim
+is to understand the trajectory of health expenditure in developing countries,
+using 143 countries over 1995 to 2008. Four research questions organise the
+study:
+
+\begin{enumerate}
+  \item Does total health expenditure grow faster than income?
+  \item What other factors are associated with that growth?
+  \item Do government and out-of-pocket expenditure follow the same path?
+  \item Do countries at different income levels follow the same trend?
+\end{enumerate}
+
+The first is central: whether the income elasticity exceeds unity, that is,
+whether health care is a luxury good or a necessity.
+
+Panel data suits this objective for three reasons.
+
+\begin{enumerate}
+  \item \textbf{It controls for unobserved country heterogeneity.} Health
+        system design, institutional quality and relative medical prices are
+        unobserved, time-invariant and correlated with income. A cross-section
+        leaves them in the error term, so the income elasticity suffers omitted
+        variable bias. Panel data removes them through the within
+        transformation, and lets us test whether they are present rather than
+        assume it.
+
+  \item \textbf{It identifies the elasticity from within-country variation.}
+        Between-country variation asks whether richer countries spend more;
+        within-country variation asks whether a country spends more as it grows.
+        Only the latter describes a trajectory. Time dummies additionally absorb
+        common time effects, separating a secular trend in health spending from
+        the income effect.
+
+  \item \textbf{It improves efficiency.} Income, population ageing and disease
+        burden are collinear across countries. Pooling both dimensions raises the
+        degrees of freedom and the independent variation in the regressors,
+        reducing multicollinearity and the standard errors.
+\end{enumerate}
+
+% -----------------------------------------------------------------------------
+\question{How this analysis differs from the reference paper}
+
+This analysis departs from the reference paper in three ways, and narrows its
+scope in two.
+
+\begin{enumerate}
+  \item \textbf{A modern window under current accounting standards.} 2010 to
+        2021 under the System of Health Accounts 2011, against 1995 to 2008 under
+        WHO's earlier National Health Accounts framework, which followed SHA 1.0.
+        The paper's conclusion that health expenditure does not grow faster than
+        income was established on a period of uninterrupted growth, closing
+        before the financial crisis reached health budgets and long before
+        COVID-19. The later window tests whether it survives the largest shock to
+        health spending on record.
+
+  \item \textbf{A measure of non-communicable disease burden.} The paper proxies
+        disease pattern by tuberculosis incidence alone, and states this was a
+        constraint, not a choice: NCD time series were unavailable. This
+        analysis adds NCD mortality, the probability that a 30-year-old dies
+        before the age of 70 from cardiovascular disease, cancer, diabetes or
+        chronic respiratory disease. TB captures only the infectious side of the
+        epidemiological transition, and as countries grow richer the burden
+        shifts to chronic conditions. Omitting them biases the income
+        coefficient, since NCD burden is itself correlated with income.
+
+  \item \textbf{Two redefined variables.} Fiscal capacity is measured as
+        government final consumption as a share of GDP rather than total
+        government expenditure, and the demographic variable is the population
+        aged 65 and above rather than 60 and above. Both follow from the coverage
+        of the modern series, and are defined in Question 4.
+\end{enumerate}
+
+Scope narrows in two respects: only total health expenditure is modelled, so
+research question 3 is not addressed; and estimation is confined to pooled OLS,
+fixed effects and random effects, as the assignment specifies, whereas the paper
+adds a Blundell and Bond dynamic estimator.
+
+% -----------------------------------------------------------------------------
+\question{Dependent and independent variables}
+
+The dependent variable is the logarithm of real current health expenditure per
+capita, in constant 2021 PPP international dollars.
+
+The independent variables are:
+
+\begin{enumerate}
+  \item \textbf{Log real GDP per capita}, constant 2021 PPP international
+        dollars. Capacity to pay.
+
+  \item \textbf{Government final consumption expenditure, per cent of GDP.}
+        Fiscal capacity, since governments finance a large share of health
+        spending.
+
+  \item \textbf{Population aged 65 and above, per cent of total.} Older
+        populations consume more health services per head.
+
+  \item \textbf{Log tuberculosis incidence per 100,000.} Infectious disease
+        burden.
+
+  \item \textbf{NCD mortality, per cent.} Chronic disease burden, as defined in
+        Question 2.
+
+  \item \textbf{World Bank income group}, time-invariant with four levels,
+        capturing structural differences in health systems across levels of
+        development. Being time-invariant, it is absorbed by the country effect
+        under fixed effects and is identified only in the pooled and random
+        effects models.
+\end{enumerate}
+
+The base specification is
+
+\begin{equation*}
+\begin{split}
+\ln \mathit{CHE}_{it} = {} & \beta_0 + \beta_1 \ln \mathit{GDP}_{it}
+  + \beta_2 \mathit{GFCE}_{it} + \beta_3 \mathit{OVER65}_{it} \\
+  & + \beta_4 \ln \mathit{TB}_{it} + \beta_5 \mathit{NCD}_{it}
+  + \gamma' \mathit{INC}_i + u_i + \varepsilon_{it}
+\end{split}
+\end{equation*}
+
+where $u_i$ is the unobserved country effect.
+
+The log transformation matters for three reasons.
+
+\begin{enumerate}
+  \item Expenditure and income enter in logs so that $\beta_1$ is the income
+        elasticity directly, reducing research question 1 to a test of
+        $H_0 : \beta_1 = 1$.
+
+  \item Expenditure, income and TB incidence are strongly right-skewed and span
+        several orders of magnitude across countries. Logs linearise the
+        relationship and stabilise the error variance.
+
+  \item Variables already expressed as percentages enter in levels, where their
+        coefficients read as the effect of a one percentage point change.
+\end{enumerate}
+
+% -----------------------------------------------------------------------------
+\question{Data sources and variable definitions}
+
+All series are drawn from the World Bank's World Development Indicators, which
+republishes the underlying WHO and UN sources. Health expenditure originates from
+the WHO Global Health Expenditure Database on the System of Health Accounts 2011
+basis; tuberculosis incidence from the WHO Global Tuberculosis Report; NCD
+mortality from the WHO Global Health Observatory; and population structure from
+the UN World Population Prospects.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\caption{Variables, definitions and sources}
+\label{tab:variables}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.19\textwidth}@{}}
+\toprule
+Variable & Definition as given by the source & Source and series code \\
+\midrule
+
+Current health expenditure per capita, PPP
+& Current expenditures on health per capita expressed in international dollars at
+  purchasing power parity.
+& WHO Global Health Expenditure Database \newline \texttt{SH.XPD.CHEX.PP.CD} \\
+\addlinespace
+
+GDP per capita, PPP, constant 2021 international dollars
+& Gross domestic product per person expressed in constant international dollars,
+  converted by purchasing power parities.
+& World Bank, International Comparison Program \newline
+  \texttt{NY.GDP.PCAP.PP.KD} \\
+\addlinespace
+
+General government final consumption expenditure, per cent of GDP
+& All government current expenditures for purchases of goods and services,
+  including compensation of employees, and most expenditures on national defence
+  and security, but excluding government military expenditures that are part of
+  government capital formation.
+& World Bank national accounts \newline \texttt{NE.CON.GOVT.ZS} \\
+\addlinespace
+
+Population ages 65 and above, per cent of total
+& Population ages 65 and above as a percentage of the total population.
+  Population is based on the de facto definition, which counts all residents
+  regardless of legal status or citizenship.
+& UN World Population Prospects \newline \texttt{SP.POP.65UP.TO.ZS} \\
+\addlinespace
+
+Incidence of tuberculosis, per 100,000 people
+& The estimated number of new and relapse tuberculosis cases arising in a given
+  year, expressed as the rate per 100,000 population. All forms of TB are
+  included, including cases in people living with HIV.
+& WHO Global Tuberculosis Report \newline \texttt{SH.TBS.INCD} \\
+\addlinespace
+
+Mortality from CVD, cancer, diabetes or CRD between exact ages 30 and 70, per
+cent
+& The percent of 30-year-old people who would die before their 70th birthday from
+  any of cardiovascular disease, cancer, diabetes or chronic respiratory disease,
+  assuming current mortality rates at every age and no death from any other
+  cause.
+& WHO Global Health Observatory \newline \texttt{SH.DYN.NCOM.ZS} \\
+\addlinespace
+
+World Bank income group
+& Classification of economies by GNI per capita into low, lower middle, upper
+  middle and high income.
+& World Bank country classification \\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\textbf{PPP and constant prices.} WHO publishes health expenditure only on a
+current-price PPP basis, while GDP per capita is available on both current and
+constant bases. Health expenditure is therefore rebased to constant 2021
+international dollars by multiplying it by the ratio of constant to current GDP
+per capita in PPP:
+
+\begin{equation*}
+\mathit{CHE}^{\,real}_{it}
+  = \mathit{CHE}^{\,current}_{it}
+    \times \frac{\mathit{GDP}^{\,constant}_{it}}{\mathit{GDP}^{\,current}_{it}}
+\end{equation*}
+
+This ratio is the country-year deflator implied by the World Bank's own real-GDP
+construction, so expenditure and income end in the same units and $\beta_1$ is a
+real income elasticity. The GDP deflator series is not used for this purpose,
+since it is a local-currency index and would not be commensurate with a PPP
+international-dollar series.
+
+\textbf{Fiscal capacity.} Xu et al.\ measure fiscal capacity as total government
+expenditure as a share of GDP. The corresponding World Bank series, Expense
+(per cent of GDP, \texttt{GC.XPN.TOTL.GD.ZS}), covers only 76.5 per cent of the
+country-years in this panel and just 91 of 162 candidate countries across all
+twelve years. General government final consumption is used instead. It is the
+narrower aggregate, excluding transfers, subsidies, interest and capital
+formation, and is therefore a lower bound on fiscal space.
+
+\textbf{Comparability with the reference paper.} Because the Global Health
+Expenditure Database was migrated to SHA 2011 and re-estimated from 2000 onward,
+the expenditure levels here are not directly comparable with those reported by
+Xu et al. The elasticity is comparable, since a log-log slope estimates the same
+parameter under either accounting basis.
+
+% -----------------------------------------------------------------------------
+\question{Cross-section entities and time period}
+
+The panel covers 145 countries observed annually from 2010 to 2021: $T = 12$,
+giving 1{,}740 country-year observations. It is strictly balanced, with every
+country observed in every year.
+
+$N = 145 \geq 50$, and $N/T \approx 12$, so $N \gg T$.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Composition of the panel}
+\label{tab:composition}
+\begin{tabular}{@{}lr@{\hspace{2.5em}}lr@{}}
+\toprule
+\multicolumn{2}{@{}l}{By income group} &
+\multicolumn{2}{l@{}}{By region} \\
+\cmidrule(r){1-2}\cmidrule(l){3-4}
+High income         & 52 & Europe and Central Asia      & 47 \\
+Upper middle income & 42 & Sub-Saharan Africa           & 37 \\
+Lower middle income & 36 & Latin America and Caribbean  & 20 \\
+Low income          & 15 & Middle East and North Africa & 18 \\
+                    &    & East Asia and Pacific        & 17 \\
+                    &    & South Asia                   &  4 \\
+                    &    & North America                &  2 \\
+\midrule
+Total & 145 & Total & 145 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Countries enter the sample if population exceeds 300,000 in every year,
+following Xu et al., and if every model variable is observed in all twelve
+years. The second rule matters because the tests in Section 3.2 require the
+pooled, fixed effects and random effects models to be estimated on an identical
+sample. The window ends in 2021, the last year for which NCD mortality is
+published.
+
+% =============================================================================
 \section{Descriptive Analysis}
-\input{sections/q06}
-\input{sections/q07}
 
-\section{Estimation Results}
-\input{sections/q08}
+\question{Graphical representation of the data}
 
-\section{Tests of Hypotheses}
-\input{sections/q09}
+Three figures, each making a single point.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{fig1_che_vs_gdp}
+\caption{Health expenditure against income, by income group. Each point is one
+country-year, 2010 to 2021.}
+\label{fig:scatter}
+\end{figure}
+
+Figure~\ref{fig:scatter} plots log health expenditure per capita against log GDP
+per capita, coloured by income group.
+
+\begin{itemize}
+  \item The relationship is strong, tight and close to linear in logs, which is
+        the descriptive support for the log-log specification in Question 3.
+  \item Income groups form ordered, overlapping bands, confirming that the
+        time-invariant classification is largely a coarsening of income rather
+        than an independent country characteristic.
+  \item The high income band fans out on the right: countries at similar income
+        levels differ substantially in what they spend. That dispersion at a
+        given income is the unobserved country heterogeneity which motivates
+        fixed effects.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{fig2_trend_by_income}
+\caption{Median health expenditure as a share of GDP, by income group and year.}
+\label{fig:trend}
+\end{figure}
+
+Figure~\ref{fig:trend} plots the median health expenditure share of GDP by year,
+separately for each income group.
+
+\begin{itemize}
+  \item The income gradient is stable. High income countries spend between 7.4
+        and 7.9 per cent of GDP throughout, the other three groups between 4.2
+        and 6.5.
+  \item Through 2019 no group shows a pronounced trend, reproducing what Xu et
+        al.\ report for 1995 to 2008.
+  \item In 2020 every group rises, the high income median moving from 7.9 to 9.0
+        per cent. The break is common rather than driven by outliers: 127 of the
+        145 countries record an increase between 2019 and 2020.
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{fig3_disease_burden}
+\caption{Disease burden across the income gradient, 2010 to 2021. The left panel
+is drawn on a logarithmic scale, so its gradient is considerably steeper than a
+direct visual comparison with the right panel suggests.}
+\label{fig:burden}
+\end{figure}
+
+Figure~\ref{fig:burden} shows the distribution of the two disease burden
+measures across income groups.
+
+\begin{itemize}
+  \item TB incidence falls steeply with income, from a median of 172 per 100,000
+        in low income countries to 10 in high income countries, close to an
+        eighteen-fold decline.
+  \item NCD mortality falls far more gently, from 24.6 to 11.5 per cent, roughly
+        halving.
+  \item Infectious burden therefore nearly disappears in rich countries while
+        chronic burden remains substantial. Tuberculosis alone would understate
+        disease burden precisely where health spending is highest, which is
+        why both measures are included.
+\end{itemize}
+
+\question{Summary statistics}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\caption{Summary statistics: overall, between and within variation}
+\label{tab:xtsum}
+\begin{tabular}{@{}ll rrrr l@{}}
+\toprule
+Variable & & Mean & Std.\ dev. & Min & Max & Obs. \\
+\midrule
+Log health expenditure p.c. & overall & 6.743 & 1.355 & 3.582 & 9.408 & $N=1740$ \\
+ & between & & 1.349 & 3.886 & 9.266 & $n=145$ \\
+ & within  & & 0.162 & 5.870 & 7.443 & $T=12$ \\
+\addlinespace
+Log GDP per capita & overall & 9.585 & 1.153 & 6.896 & 11.912 & $N=1740$ \\
+ & between & & 1.153 & 6.923 & 11.786 & $n=145$ \\
+ & within  & & 0.096 & 9.176 & 9.988 & $T=12$ \\
+\addlinespace
+Govt final consumption (\% of GDP) & overall & 16.756 & 7.138 & 2.360 & 103.164 & $N=1740$ \\
+ & between & & 6.714 & 5.584 & 62.615 & $n=145$ \\
+ & within  & & 2.483 & $-$17.664 & 57.305 & $T=12$ \\
+\addlinespace
+Population aged 65+ (\% of total) & overall & 8.884 & 6.392 & 0.862 & 29.217 & $N=1740$ \\
+ & between & & 6.361 & 1.091 & 26.702 & $n=145$ \\
+ & within  & & 0.806 & 5.280 & 12.138 & $T=12$ \\
+\addlinespace
+Log TB incidence & overall & 3.876 & 1.501 & $-$0.478 & 7.115 & $N=1740$ \\
+ & between & & 1.489 & 0.052 & 6.746 & $n=145$ \\
+ & within  & & 0.220 & 2.966 & 4.799 & $T=12$ \\
+\addlinespace
+NCD mortality, ages 30--70 (\%) & overall & 19.007 & 6.917 & 6.900 & 41.300 & $N=1740$ \\
+ & between & & 6.835 & 8.508 & 39.617 & $n=145$ \\
+ & within  & & 1.189 & 11.932 & 25.224 & $T=12$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\texttt{xtsum} splits each variable into a between component, the country means
+$\bar{x}_i$, and a within component, $x_{it} - \bar{x}_i + \bar{x}$, where the
+grand mean is added back so the two are comparable (StataCorp, 2025). Stata
+reports $T = 12$ rather than an average $\bar{T}$, confirming the panel is
+balanced.
+
+\begin{enumerate}
+  \item \textbf{Between-country variation dominates for every variable.} The
+        ratio of between to within standard deviations is 12.0 for log GDP, 8.3
+        for log health expenditure, 7.9 for population over 65, 6.8 for log TB
+        and 5.8 for NCD mortality. Two countries drawn at random differ in
+        income about twelve times more than one country does between two random
+        years. In variance terms, only 0.7 per cent of the variation in income
+        is within-country.
+
+  \item \textbf{This governs what each estimator can do.} Fixed effects discards
+        the between component, so it identifies the income elasticity from under
+        one per cent of the variation in the regressor, while pooled OLS and
+        random effects draw on both. Fixed effects will therefore return larger
+        standard errors on identical data.
+
+  \item \textbf{Government final consumption is the exception}, with a
+        between-to-within ratio of only 2.7 and 12 per cent of its variance
+        within-country. Fiscal shares move materially year to year, so it is the
+        one regressor fixed effects can identify comfortably.
+
+  \item \textbf{NCD mortality has the least usable time variation}, 2.9 per cent
+        of its variance within-country and a within standard deviation of 1.19
+        against a mean of 19.0. It is a modelled series that moves slowly, so
+        fixed effects will identify it weakly despite its large cross-country
+        spread.
+
+  \item \textbf{The negative within minimum is not a negative expenditure
+        share.} Subtracting the grand mean recovers the actual deviations
+        (StataCorp, 2025): the within maximum of 57.305 implies a
+        country exceeding its own average by $57.305 - 16.756 = 40.5$ percentage
+        points, and the within minimum implies one falling 34.4 points below it.
+        Both are Timor-Leste, whose government consumption ran at 103.2 per cent
+        of GDP in 2010 and 28.2 per cent by 2021. The within extremes are one
+        country's trajectory rather than a general feature.
+\end{enumerate}
+
+Log TB incidence has one country with zero within variation: WHO reports a
+constant 221 per 100,000 for Bangladesh across all twelve years. A zero within
+standard deviation means the variable is time-invariant for that country
+(StataCorp, 2025), so Bangladesh contributes nothing to the TB coefficient under
+fixed effects.
+
+% =============================================================================
+\section{Estimation and Tests of Hypotheses}
+
+\subsection{Coefficient Estimates}
+
+\question{Estimates and interpretation}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\caption{Determinants of health expenditure: pooled OLS, fixed effects and
+random effects. Dependent variable: log real health expenditure per capita.}
+\label{tab:estimates}
+\begin{tabular}{@{}l cccccc@{}}
+\toprule
+& \multicolumn{3}{c}{Without time dummies} & \multicolumn{3}{c}{With time dummies} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+& Pooled & FE & RE & Pooled & FE & RE \\
+\midrule
+Log GDP per capita & 0.798*** & 0.773*** & 0.761*** & 0.800*** & 0.744*** & 0.746*** \\
+ & (0.062) & (0.096) & (0.075) & (0.063) & (0.102) & (0.085) \\
+\addlinespace[2pt]
+Govt final consumption & 0.014*** & 0.020** & 0.019** & 0.014*** & 0.017** & 0.017** \\
+ & (0.004) & (0.008) & (0.007) & (0.004) & (0.007) & (0.007) \\
+\addlinespace[2pt]
+Population 65+ & 0.041*** & 0.023** & 0.030*** & 0.041*** & $-$0.000 & 0.021*** \\
+ & (0.004) & (0.009) & (0.005) & (0.004) & (0.012) & (0.006) \\
+\addlinespace[2pt]
+Log TB incidence & $-$0.090*** & $-$0.074* & $-$0.075*** & $-$0.089*** & 0.002 & $-$0.041* \\
+ & (0.027) & (0.040) & (0.028) & (0.028) & (0.031) & (0.023) \\
+\addlinespace[2pt]
+NCD mortality & $-$0.013*** & $-$0.014** & $-$0.013*** & $-$0.013*** & $-$0.007 & $-$0.010* \\
+ & (0.004) & (0.006) & (0.005) & (0.004) & (0.006) & (0.005) \\
+\addlinespace[2pt]
+Lower middle income & $-$0.020 & --- & 0.029 & $-$0.021 & --- & 0.075 \\
+ & (0.106) &  & (0.106) & (0.107) &  & (0.115) \\
+\addlinespace[2pt]
+Upper middle income & 0.082 & --- & 0.223 & 0.080 & --- & 0.353* \\
+ & (0.148) &  & (0.151) & (0.150) &  & (0.188) \\
+\addlinespace[2pt]
+High income & 0.035 & --- & 0.307 & 0.033 & --- & 0.604** \\
+ & (0.195) &  & (0.196) & (0.201) &  & (0.280) \\
+\addlinespace[2pt]
+Constant & $-$0.949 & $-$0.656 & $-$0.784 & $-$0.948 & $-$0.605 & $-$0.902 \\
+ & (0.576) & (1.057) & (0.719) & (0.578) & (1.069) & (0.736) \\
+\midrule
+Year dummies jointly zero & & & & $F=4.29$ & $F=6.51$ & $\chi^2=58.56$ \\
+& & & & $p=0.000$ & $p=0.000$ & $p=0.000$ \\
+\addlinespace[2pt]
+Observations & 1740 & 1740 & 1740 & 1740 & 1740 & 1740 \\
+Countries & & 145 & 145 & & 145 & 145 \\
+$R^2$ & 0.953 & 0.445 & 0.444 & 0.953 & 0.481 & 0.473 \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{\textwidth}\vspace{4pt}\footnotesize
+Cluster-robust standard errors by country in parentheses.
+*** $p<0.01$, ** $p<0.05$, * $p<0.10$. Base category for income group is low
+income. $R^2$ is overall for pooled OLS and within for fixed and random effects.
+Fixed effects is numerically identical to OLS with 145 country dummies; the
+dummies are absorbed rather than reported.
+\end{minipage}
+\end{table}
+
+\textbf{(d) Year dummies.} Jointly significant in all three models at any
+conventional level: $F(11,144)=4.29$ pooled, $F(11,144)=6.51$ fixed effects,
+$\chi^2(11)=58.56$ random effects. Common time effects belong in the
+specification.
+
+\textbf{(e) Findings.}
+
+\begin{enumerate}
+  \item \textbf{The income elasticity is stable across every specification},
+        between 0.744 and 0.800, always significant at 1 per cent, and always
+        below unity. The central result does not depend on the estimator.
+
+  \item \textbf{Fixed effects carries the largest standard error on income},
+        0.102 against 0.062 pooled, exactly as the summary statistics predicted:
+        it identifies the elasticity from the 0.7 per cent of income variation
+        that is within-country.
+
+  \item \textbf{Time dummies change the fixed effects results considerably,
+        but barely affect pooled OLS.} Under fixed effects, population over 65 falls from
+        0.023 to $-0.000$, log TB from $-0.074$ to 0.002, and NCD mortality
+        loses significance. Pooled coefficients move in the third decimal. The
+        reason is in Question 7: these three regressors have only 1.6, 2.1 and
+        2.9 per cent of their variance within-country, and most of that little
+        is a common trend shared by all countries. Once year effects absorb it,
+        little identifying variation remains. Pooled OLS draws mainly on
+        between-country variation, which year dummies leave untouched.
+
+  \item \textbf{Government final consumption is the only regressor significant
+        in all six models}, at 0.014 to 0.020. It is also the only one with
+        substantial within-country variation, 12 per cent of its variance. A one
+        percentage point rise in the government consumption share is associated
+        with roughly 1.4 to 2.0 per cent higher health spending per capita.
+
+  \item \textbf{Both disease measures carry negative signs where significant},
+        which should not be read as disease reducing health spending. High TB
+        incidence and high premature NCD mortality are markers of weak health
+        systems and low development. Conditional on income they proxy for
+        residual underdevelopment, so the negative sign reflects that
+        association rather than a demand response to illness.
+
+  \item \textbf{Income group behaves differently in each estimator.} Fixed
+        effects absorbs it entirely, since it is time-invariant. Pooled OLS
+        finds it insignificant, because log GDP already captures the income
+        gradient. Random effects, which weights between and within variation by
+        their relative variances, recovers a significant high income premium of
+        0.604 once time effects are included.
+\end{enumerate}
+
+$R^2$ is not comparable across the three estimators: 0.953 for pooled is an
+overall fit dominated by between-country variation, while 0.445 to 0.481 for
+fixed and random effects is within-country fit.
+
+\textbf{(f) Interpretation of the income coefficient.} In the fixed effects
+model with time dummies, the coefficient on log GDP per capita is \textbf{0.744}.
+A one per cent rise in real GDP per capita within a country is associated with a
+0.744 per cent rise in real health expenditure per capita, holding fiscal
+capacity, population ageing and disease burden constant.
+
+Since the specification is log-log, this is the income elasticity of health
+expenditure directly. It is significantly below unity: testing
+$H_0 : \beta_1 = 1$ gives $F(1,144) = 6.29$, $p = 0.013$, so the null is
+rejected at 5 per cent. Health expenditure grows more slowly than income.
+
+This answers research question 1. \textbf{Health care behaves as a necessity
+rather than a luxury good} in this panel: as countries grow richer, health
+spending rises but its share of GDP does not rise mechanically with income. The
+estimate sits at the lower edge of the 0.75 to 0.95 range Xu et al.\ report for
+1995 to 2008, so their central conclusion survives re-estimation on a modern
+panel that includes the COVID-19 shock.
+
+% =============================================================================
+\subsection{Tests of Hypotheses}
+
+\question{Choosing between the models}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Model comparison tests}
+\label{tab:tests}
+\begin{tabular}{@{}ll rll l@{}}
+\toprule
+Comparison & Time dummies & Statistic & Distribution & $p$ & Decision \\
+\midrule
+(a) Pooled vs FE & No  & $F=55.80$      & $F(144,1590)$   & 0.000 & Reject $H_0$ \\
+                 & Yes & $F=59.71$      & $F(144,1579)$   & 0.000 & Reject $H_0$ \\
+\addlinespace
+(b) Pooled vs RE & No  & $LM=6302.74$   & $\bar\chi^2(01)$ & 0.000 & Reject $H_0$ \\
+                 & Yes & $LM=6358.42$   & $\bar\chi^2(01)$ & 0.000 & Reject $H_0$ \\
+\addlinespace
+(c) FE vs RE     & No  & $\chi^2=20.84$ & $\chi^2(5)$     & 0.001 & Reject $H_0$ \\
+                 & Yes & $\chi^2=78.04$ & $\chi^2(5)$     & 0.000 & Reject $H_0$ \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{\textwidth}\vspace{4pt}\footnotesize
+All three tests use conventional standard errors, since none is reported under
+cluster-robust variance estimation.
+\end{minipage}
+\end{table}
+
+\textbf{(a) Pooled OLS against fixed effects.}
+
+\begin{itemize}
+  \item $H_0 : u_i = 0$ for all $i$. There are no country effects and pooled OLS
+        is adequate.
+  \item $H_1$: at least one $u_i \neq 0$.
+  \item F test on the joint significance of the 144 country effects.
+        $F(144,1590) = 55.80$ without time dummies and $F(144,1579) = 59.71$
+        with them, $p < 0.001$ in both.
+  \item \textbf{Reject $H_0$.} Country effects are present and pooled OLS is
+        misspecified.
+\end{itemize}
+
+\textbf{(b) Pooled OLS against random effects.}
+
+\begin{itemize}
+  \item $H_0 : \mathrm{Var}(u_i) = 0$. There is no random country effect and
+        pooled OLS is adequate.
+  \item $H_1 : \mathrm{Var}(u_i) > 0$.
+  \item Breusch and Pagan Lagrange multiplier test. $LM = 6302.74$ without time
+        dummies and $6358.42$ with them, $p < 0.001$ in both.
+  \item \textbf{Reject $H_0$.} Random effects is preferred to pooled OLS.
+\end{itemize}
+
+The null places the variance on the boundary of the parameter space, so the
+statistic follows $\bar\chi^2(01)$, a fifty-fifty mixture of $\chi^2(0)$ and
+$\chi^2(1)$, rather than a plain $\chi^2(1)$.
+
+\textbf{(c) Fixed effects against random effects.}
+
+\begin{itemize}
+  \item $H_0 : \mathrm{Cov}(u_i, X_{it}) = 0$. The country effects are
+        uncorrelated with the regressors, so random effects is consistent and
+        efficient.
+  \item $H_1 : \mathrm{Cov}(u_i, X_{it}) \neq 0$. Random effects is inconsistent
+        and fixed effects is consistent.
+  \item Hausman test. $\chi^2(5) = 20.84$, $p = 0.001$ without time dummies;
+        $\chi^2(5) = 78.04$, $p < 0.001$ with them.
+  \item \textbf{Reject $H_0$.} Fixed effects is preferred.
+\end{itemize}
+
+Income group is excluded here because the test requires both estimators to
+share a coefficient vector. With time dummies Stata reports that the differenced
+covariance matrix has rank 5 against 16 coefficients tested and is not positive
+definite, so that statistic corroborates rather than leads. The version without
+time dummies is well behaved and rejects at the 0.1 per cent level.
+
+\textbf{(d) Comment.} All three tests select the same model. Pooled OLS is
+rejected twice, so unobserved country heterogeneity is substantial, as
+Figure~\ref{fig:scatter} and Question 7 both show. The Hausman test then rejects
+random effects: the country effects are correlated with the regressors. This
+seems plausible, since health system capacity and institutional quality are
+bound up with a country's income level. Regressors are usually outcomes of
+choice processes, so cases where random effects is appropriate tend to be the
+exception (Wooldridge, p.~493). \textbf{The preferred specification is fixed effects with time
+dummies}, and its elasticity of 0.744 is the estimate that answers research
+question 1.
+
+A second consideration does not depend on any test. The units are countries,
+and 145 countries with complete data are closer to the population than to a
+random draw from it. Each country effect is then better treated as a separate
+intercept, which is mechanically what fixed effects does. Fixed effects is
+generally the more convincing estimator for policy analysis on aggregated data
+(Wooldridge, p.~493).
+
+We should not overstate the rejection. The Hausman statistic of 78.04 rejects
+decisively, yet the elasticity moves only from 0.746 under random effects to
+0.744 under fixed effects, against a standard error near 0.10. The test rejects
+on the joint coefficient vector, but the coefficient of interest is essentially
+unchanged. Random effects is still reported because fixed effects cannot
+identify income group.
+
+One limitation remains. Fixed effects removes time-invariant heterogeneity but
+not simultaneity. Health expenditure and GDP are jointly determined, so log GDP
+is unlikely to be strictly exogenous and the elasticity is a conditional
+within-country association rather than a causal parameter. Addressing this
+requires instrumenting income, which is why Xu et al.\ supplement their static
+models with a Blundell and Bond dynamic estimator, and which lies outside the
+estimator set this assignment specifies.
+
+% =============================================================================
+\clearpage
+\appendix
+\section{Stata commands}
+
+\begin{footnotesize}
+\begin{verbatim}
+clear all
+use "data/G3.dta", clear
+
+encode iso3, gen(country_id)
+xtset country_id year
+
+global Y  "l_che"
+global X  "l_gdp gfce_gdp over65 l_tb ncd_mort"
+global TI "i.inc_group_n"
+
+* ---- Q6  Figures
+* Colour, legend and axis-title options are omitted here for readability.
+
+* Fig 1  income against expenditure, by income group
+separate $Y, by(inc_group_n)
+twoway scatter l_che1 l_che2 l_che3 l_che4 l_gdp
+graph export "output/figures/fig1_che_vs_gdp.pdf", replace
+
+* Fig 2  median health share of GDP, by year and income group
+gen che_gdp = 100*che_pc_ppp/gdp_pc_ppp
+preserve
+    collapse (median) che_gdp, by(year inc_group_n)
+    separate che_gdp, by(inc_group_n)
+    twoway line che_gdp1 che_gdp2 che_gdp3 che_gdp4 year
+    graph export "output/figures/fig2_trend_by_income.pdf", replace
+restore
+
+* Fig 3  disease burden by income group (TB panel in logs)
+graph box l_tb, over(inc_group_n) nodraw name(tb, replace)
+graph box ncd_mort, over(inc_group_n) nodraw name(ncd, replace)
+graph combine tb ncd, cols(2)
+graph export "output/figures/fig3_disease_burden.pdf", replace
+
+* ---- Q7  Summary statistics
+xtdescribe
+xtsum $Y $X
+
+* ---- Q8  Pooled / FE / RE, without then with time dummies
+*      cluster-robust standard errors by country
+regress $Y $X $TI, vce(cluster country_id)
+estimates store POOLED
+
+xtreg $Y $X $TI, fe vce(cluster country_id)
+estimates store FE
+
+xtreg $Y $X $TI, re vce(cluster country_id)
+estimates store RE
+
+regress $Y $X $TI i.year, vce(cluster country_id)
+estimates store POOLED_T
+testparm i.year
+
+xtreg $Y $X $TI i.year, fe vce(cluster country_id)
+estimates store FE_T
+testparm i.year
+
+xtreg $Y $X $TI i.year, re vce(cluster country_id)
+estimates store RE_T
+testparm i.year
+
+estimates table POOLED FE RE POOLED_T FE_T RE_T, b(%9.3f) se(%9.3f) stats(N N_g)
+
+* Q8f  income elasticity against unity
+xtreg $Y $X $TI i.year, fe vce(cluster country_id)
+test l_gdp = 1
+
+* ---- Q9  Model comparison tests
+*      conventional standard errors: none is reported under vce(cluster)
+
+* (a) pooled vs FE: read "F test that all u_i=0" at the foot of the output
+xtreg $Y $X $TI, fe
+xtreg $Y $X $TI i.year, fe
+
+* (b) pooled vs RE
+xtreg $Y $X $TI, re
+xttest0
+xtreg $Y $X $TI i.year, re
+xttest0
+
+* (c) FE vs RE: income group dropped, hausman needs a shared coefficient vector
+xtreg $Y $X, fe
+estimates store fe_h
+xtreg $Y $X, re
+estimates store re_h
+hausman fe_h re_h, sigmamore
+
+xtreg $Y $X i.year, fe
+estimates store fe_ht
+xtreg $Y $X i.year, re
+estimates store re_ht
+hausman fe_ht re_ht, sigmamore
+\end{verbatim}
+\end{footnotesize}
 
 \end{document}

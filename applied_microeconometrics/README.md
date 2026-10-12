@@ -22,29 +22,46 @@ Assignment brief: [`assignment/assignment.pdf`](assignment/assignment.pdf)
 ## Pipeline
 
 ```
-data/raw/  ──01_build_panel.R──►  data/G3.dta  ──03_analysis.do──►  output/tables/*.tex
-(GHED, WDI)         │            (long panel,                       output/figures/*.pdf
-                    │             country × year)                          │
-                    └──02_checks.R (asserts N≥50, N>>T,                     │
-                        ≥2 time-varying, ≥1 time-invariant)                 ▼
-                                                              writeup/main.tex (Overleaf)
+World Bank API ──00_fetch_raw.R──►  data/raw/*.csv ──01_build_panel.R──►  data/G3.dta
+(WDI + GHED via SH.XPD.*)          (superset: all                        (balanced panel,
+                                    countries/years)                      145 x 12)
+                                                          │                      │
+                        02_checks.R (asserts N≥50, N>>T, ─┘                      │
+                        ≥2 time-varying, ≥1 time-invariant)                      ▼
+                                                                          analysis.do
+                                                                              │
+                                              output/figures/*.pdf ◄───────────┘
+                                                          │
+                                                          ▼
+                                              writeup/main.tex (Overleaf)
 ```
 
 **R builds the data, Stata does the econometrics.** R handles the wide→long reshape, the
 ISO3 joins and the missingness audit far more cleanly than Stata; Stata owns `xtsum`,
-`xtreg`, `hausman` and `outreg2` because those are what the course grades.
+`xtreg` and `hausman` because those are what the course grades.
+
+Tables are written by hand into `writeup/main.tex` rather than exported from Stata, so
+the write-up stays a single self-contained file that pastes into Overleaf. `analysis.do`
+prints every number those tables contain.
 
 ## Running it
 
 ```bash
 # from this directory
+Rscript scripts/00_fetch_raw.R        # pulls WDI+GHED extracts into data/raw/ (~9 MB)
 Rscript scripts/01_build_panel.R      # writes data/G3.dta
 Rscript scripts/02_checks.R           # fails loudly if a constraint is violated
-stata -b do scripts/03_analysis.do    # writes output/tables/ and output/figures/
+stata -b do scripts/analysis.do       # prints all results, writes output/figures/
 ```
 
+Only the last step is needed to reproduce the write-up, since `data/G3.dta` is committed.
+Open `analysis.do` in the Do-file Editor and click Execute; nothing needs installing.
+
+`00_fetch_raw.R` is cached — it skips anything already in `data/raw/` unless given
+`--force`. Raw extracts are git-ignored, so that is the first command to run on a fresh
+clone.
+
 The `stata` alias resolves to Stata SE 17's console binary (defined in `~/.zshrc`).
-Batch mode halts on the first error and writes the `r(###)` code into `scripts/03_analysis.log`.
 
 ## Design decisions — TO CONFIRM
 
