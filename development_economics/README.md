@@ -1,8 +1,8 @@
 # Development Economics 2026: Replication and Extension Project
 
-Team members (3): _TBD_
+Team members (3): Ashwath, Drishti, Johan
 
-Group leader / contact: _TBD_
+Group leader / contact: Drishti (email and phone: _to add_)
 
 Reference paper: Baland, J.-M., Cassan, G., & Decerf, B. (2021). "Too Young to Die":
 Deprivation measures combining poverty and premature mortality. *American Economic Journal:
