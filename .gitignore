@@ -41,6 +41,9 @@
 */data/raw/*
 !*/data/raw/.gitkeep
 !*/data/raw/README.md
+# Development Economics: source data in replication_package/ and constructed/
+development_economics/*/data/*
+!development_economics/*/data/README.md
 
 # Keep output/ folders in the tree even when empty.
 !*/output/**/.gitkeep

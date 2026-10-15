@@ -1,6 +1,6 @@
 #!/bin/zsh
 # =============================================================================
-# Rebuild benchmark/ from the authors' untouched package in data/raw/119941-V1.
+# Rebuild benchmark/ from the authors' untouched package in replication_package/data/119941-V1.
 # Copies their do-files and applies the minimal macOS patches listed in
 # PATCHES.md. Nothing here changes what the code computes.
 #
@@ -9,7 +9,7 @@
 set -euo pipefail
 
 UNIT="${0:A:h:h}"                      # development_economics/
-PKG="$UNIT/data/raw/119941-V1"
+PKG="$UNIT/replication_package/data/119941-V1"
 B="$UNIT/benchmark"
 
 rm -rf "$B/Code" "$B/Data" "$B/Figures"
@@ -24,7 +24,7 @@ for d in GBD PovCalNet region; do ln -s "$PKG/Data/$d" "$B/Data/$d"; done
 # countries, extra PopName column). Rebuild France-only files in that format.
 # The PERIOD table is used: see notes/paper_notes.md (cohort tables cannot give Figure 5).
 mkdir -p "$B/Data/HMD"
-HMD="$UNIT/data/raw/hmd"
+HMD="$UNIT/replication_package/data/hmd"
 if [[ -f "$HMD/lt_both.zip" && -f "$HMD/population.zip" ]]; then
   unzip -p "$HMD/lt_both.zip"    bltper_1x1/bltper_1x1.txt  | awk 'NR==3 || $1=="FRATNP"' | sed -E 's/^[A-Z]+ +//; s/^PopName +//' > "$B/Data/HMD/France_lt.txt"
   unzip -p "$HMD/population.zip" Population/Population.txt  | awk 'NR==3 || $1=="FRATNP"' | sed -E 's/^[A-Z]+ +//; s/^PopName +//' > "$B/Data/HMD/France_pop.txt"

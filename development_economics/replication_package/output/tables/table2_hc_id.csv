@@ -1,0 +1,4 @@
+dist,young_AP,young_NP,young_D,old_D,HC,ID_gamma1,ID_gamma2
+x,0,1,1,1,0,.5,1
+x',0,2,0,1,0,0,0
+x'',1,1,0,1,.5,.5,.5

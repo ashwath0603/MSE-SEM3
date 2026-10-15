@@ -3,7 +3,7 @@
 This folder holds a **patched copy** of the authors' Stata code from the openICPSR package
 (Baland, Cassan & Decerf 2021, E119941V1). We run it once on the original raw data. Its
 output, `Data/CleanedData/PovertyMortalityWorld.dta`, is the **reference answer** that our
-own pipeline in `../scripts/` is checked against (`20_compare.do`).
+own pipeline (`../replication_package/scripts/replication.do`) is checked against (its step 12).
 
 **Nothing in our results is produced by this code.** It only verifies them.
 
@@ -16,7 +16,7 @@ cd benchmark && stata -b do Code/Master.do           # writes benchmark/Master.l
 
 `apply_patches.sh` deletes and rebuilds `Code/`, `Data/` and `Figures/` every time, so this
 folder never drifts from the package. Raw inputs are **symlinked** into
-`../data/raw/119941-V1`, not copied.
+`../replication_package/data/119941-V1`, not copied.
 
 ## Patches
 
@@ -29,7 +29,7 @@ All of these are needed only to run on macOS in batch mode. **None changes a com
 | P3 | `MergingGBDandPovcalNet.do`, `VariableConstruction.do`, `HMD_VariableConstruction.do` | `!rmdir "$dump" /s /q` | `!rm -rf "$dump"` | Windows shell syntax |
 | P4 | `HMD_VariableConstruction.do` | `"$Base\Data\HMD/…"` | `"$Base/Data/HMD/…"` | Backslash path separator |
 | P5 | `DescriptiveStats.do` | `br …` | `list …` | The Data Editor is unavailable in batch mode |
-| P6 | `Master.do`, `DescriptiveStats.do` | — | HMD step and Figure 5 block commented out | **Only while** `data/raw/hmd/France_*.txt` are missing. Applied automatically and lifted on rebuild once the files exist |
+| P6 | `Master.do`, `DescriptiveStats.do` | — | HMD step and Figure 5 block commented out | **Only while** the HMD zips in `replication_package/data/hmd/` are missing. Applied automatically and lifted on rebuild once the files exist |
 
 ## What the authors' code tells us
 

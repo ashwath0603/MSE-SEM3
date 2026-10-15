@@ -125,46 +125,60 @@ The full reasoning is in the 2026-10-11 chat; the shortlist is below.
 
 ```
 development_economics/
-├── README.md            this file: brief, deadlines, decisions, log
-├── assignment/          paper + guidelines PDFs
-├── notes/paper_notes.md chunked reading notes; §3 = every discrepancy found
-├── data/raw/            READ ONLY, git-ignored (see data/raw/README.md)
-│   ├── 119941-V1/       authors' openICPSR package, unchanged
-│   └── hmd/             HMD bulk zips (France = FRATNP) for Figure 5
-├── data/clean/          everything our scripts build
-├── benchmark/           authors' code, patched only to run on macOS (PATCHES.md)
-├── scripts/             OUR replication, run in order by 00_master.do
-├── output/replication/  tables/ (csv) and figures/ (pdf, png)
-└── writeup/             replication/, final/, presentation/
+├── README.md               this file: brief, deadlines, decisions, log
+├── assignment/             paper + guidelines PDFs
+├── notes/paper_notes.md    chunked reading notes; §3 = every discrepancy found
+├── replication_package/    the paper's analysis on the AUTHORS' data
+│   ├── data/               the openICPSR package unchanged + HMD France (README.md: sources)
+│   ├── scripts/            replication.do: the whole replication, one file
+│   └── output/             tables/ (csv) and figures/ (pdf, png)
+├── constructed/            the same analysis on data WE downloaded from the sources
+│   ├── data/               GBD 2023, WDI Dec 2019 archive, HMD (README.md: sources + caveats)
+│   ├── scripts/            constructed.do (one file) + fetch_wdi_archive.py (download, run once)
+│   └── output/             tables/, figures/; sensitivity_*/ only if a switch is changed
+├── benchmark/              authors' code, patched only to run on macOS (PATCHES.md); used
+│                           only by step 12 of replication.do, to verify it
+└── writeup/                replication/, final/, presentation/
 ```
+
+Source data in both `data/` folders is git-ignored (only the READMEs are tracked). Intermediate
+datasets are never saved in the project: each do-file writes them to a scratch folder in Stata's
+temp directory and deletes it at the end.
 
 ## Running it
 
 ```bash
-cd development_economics
-stata -b do scripts/00_master.do          # raw data -> every table and figure (~1 min)
+cd development_economics/replication_package && stata -b do scripts/replication.do   # ~1 min
+cd ../constructed && stata -b do scripts/constructed.do                              # ~1 min, AFTER the replication
 
-# only needed once, for the checks in 20_compare.do:
+# optional, only for step 12 of replication.do (check against the authors' own code):
 zsh benchmark/apply_patches.sh && (cd benchmark && stata -b do Code/Master.do)
 ```
 
-`scripts/_run_one.do <step>` re-runs a single step (e.g. `stata -b do scripts/_run_one.do
-10_tables`) with the same globals. It is a development helper.
+Each do-file also runs from the Do-file Editor, from its folder or from `scripts/`. Run it as a
+file, not by pasting into the Command window (it uses `///` line breaks).
 
-| Script | Does | Paper output |
-|---|---|---|
-| `01_gbd_clean` | GBD deaths and rates → population by age bin; ISO3 crosswalk | — |
-| `02_povcal_clean` | PovCalNet HC, interpolated annually | — |
-| `03_panel` | Merge, 113-country sample, regional and World aggregates | — |
-| `04_single_ages` | 5-year bins → single ages 0–95 | — |
-| `05_gd` | Generated Deprivation for â ∈ {5, 40, 50, 80} | core of everything |
-| `06_id_gbd` | Inherited Deprivation (â = 5) | Figure 3 |
-| `07_counterfactuals` | 1990 births / mortality held fixed | Figure 7 |
-| `08_hmd_france` | France 1816–2024 from HMD period tables, â = 40 | Figure 5 |
-| `09_simulations` | Toy examples and the shock simulations, no data | Tables 1–2, Figures 2 and 4 |
-| `10_tables` | Tables 3–4 and **51 published numbers checked** → `targets.csv` | Tables 3–4, Section IV text |
-| `11_figures` | Figures 2–10 | Figures |
-| `20_compare` | Our numbers vs the authors' code and Excel → `compare_benchmark.csv` | verification |
+`constructed.do` has two switches at the top, `POVERTY` and `MORTALITY` (`"constructed"` or
+`"package"`). The default is both constructed. Setting one to `"package"` isolates the other's
+effect and writes to `constructed/output/sensitivity_poverty_only/` or `.../sensitivity_mortality_only/`.
+
+| Step: replication.do | Step: constructed.do | Does | Paper output |
+|---|---|---|---|
+| — | 1 | GBD 2023 → the 21 age bins (1-4 = 12-23 months + 2-4 years); checks against GBD population | — |
+| — | 2 | Our $1.90 line-up from the WDI archive (log-normal, national-accounts growth) | — |
+| 1 | 3 | GBD deaths and rates → population by age bin; ISO3 crosswalk | — |
+| 2 | 4 | Poverty headcount, interpolated annually; high-income flag | — |
+| 3 | 5 | Merge, sample, regional and World aggregates | — |
+| 4 | 6 | Age bins → single ages 0–95 | — |
+| 5 | 7 | Generated Deprivation for â ∈ {5, 40, 50, 80} | core of everything |
+| 6 | 8 | Inherited Deprivation (â = 5) | Figure 3 |
+| 7 | 9 | 1990 births / mortality held fixed | Figure 7 |
+| 8 | 10 | France 1816–2024 from HMD period tables, â = 40 | Figure 5 |
+| 9 | 11 | Toy examples and shock simulations, no data | Tables 1–2, Figures 2 and 4 |
+| 10 | 12 | Tables 3–4, **51 published numbers checked** → `targets.csv`; `gd_countries.csv` | Tables 3–4, Section IV text |
+| 11 | 13 | Figures 2–10 | Figures |
+| 12 | — | Our numbers vs the authors' code and Excel → `compare_benchmark.csv` (skipped if `benchmark/` is not built) | verification |
+| — | 14 | Constructed vs authors' data: line-up, GBD by age, sample, every published number, ranks → `compare_*.csv` | robustness |
 
 ## Replication status (2026-10-11)
 
@@ -184,6 +198,21 @@ zsh benchmark/apply_patches.sh && (cd benchmark && stata -b do Code/Master.do)
   figure needs period tables.
 - **Every table and figure in the paper except Figure 1 (a schematic) is now reproduced.**
 
+## Constructed data (2026-10-15)
+
+Goal: run the same analysis on data we downloaded ourselves, not the authors' extracts.
+
+- **Poverty:** PovCalNet is retired and PIP refuses 2011-PPP requests, so we rebuilt the $1.90
+  line-up from the WDI Dec 2019 archive (same vintage). Correlation 0.989 with the authors' series.
+- **Mortality:** GBD 2023, the only round the Results tool serves. It revises 1990-2017: ages 5-19
+  are 22-29% higher, mostly in poor Sub-Saharan countries.
+- **Result:** 108 countries (not 113). World GD₁ 52.90% (1990) and 17.22% (2015), against the
+  paper's 52.8% and 17.2%. One published example breaks: Table 4's Gabon/Morocco contrast, due to
+  the poverty data.
+- **Every source, download step and caveat:** `constructed/data/README.md`. The sample changes,
+  the 7 countries we cannot fill and why, and a decomposition showing they do not drive the
+  results are all there.
+
 ## Log
 
 | Date | What | Who |
@@ -195,6 +224,12 @@ zsh benchmark/apply_patches.sh && (cd benchmark && stata -b do Code/Master.do)
 | 2026-10-11 | **Benchmark:** authors' code run on macOS with 6 documented, non-computational patches. Reproduces the paper's headline numbers | Claude |
 | 2026-10-11 | **Our pipeline** `scripts/00–11, 20` drafted and run end to end. Matches the benchmark (see status). Found: Table 4 typo, swapped re-rank years, 3 silently dropped countries, tie-sensitive ranks, hand-rounded Table 3 | Claude |
 | 2026-10-11 | HMD France downloaded (period life tables + population, bulk files). `08_hmd_france.do` written; benchmark fed the same files. Figure 5 done. Found: readme's "cohort" should be "period"; Alsace-Lorraine break now in 1920 | Ashwath + Claude |
+| 2026-10-15 | Decided to rebuild the data from public sources. PIP 2011-PPP blocked (authorisation). GBD 2023 first download had Global only | Ashwath |
+| 2026-10-15 | Poverty line-up rebuilt from the WDI Dec 2019 archive (`00_fetch_wdi_archive.py`, `02b`, `21`); `00_master.do rebuilt` runs end to end. Package run unchanged (all tables and checks identical) | Claude |
+| 2026-10-15 | GBD 2023 downloaded: deaths for all 21 bins (1-4 as 12-23 months + 2-4 years) and population, every country, 1990-2017 | Ashwath |
+| 2026-10-15 | Mortality rebuilt from GBD 2023 (`01b`, `MORTALITY` switch, `compare_gbd.csv`). Three rebuilt runs: poverty, mortality, both. Tuvalu enters; `04` handles its empty 95+ bin. Package run unchanged | Claude |
+| 2026-10-15 | Decided not to fill the 7 poverty gaps with a third source; caveats written up in `constructed/data/README.md` | Ashwath |
+| 2026-10-15 | **Restructured** into `replication_package/` and `constructed/` (data, scripts, output each). The step scripts were merged into `replication.do` and `constructed.do`; intermediates now go to a temp folder. Every table reproduced exactly by both (differences only in the 15th digit) | Ashwath + Claude |
 
 ## AI-use log
 
@@ -206,3 +241,6 @@ course's permitted categories.
 | 2026-10-11 | Claude Code | Ideation; literature (reading support) | Summarised and indexed the reference paper into notes, checked table arithmetic, brainstormed extension directions. No submission prose written |
 | 2026-10-11 | Claude Code | Code | Patched the authors' do-files to run on macOS (`benchmark/`) |
 | 2026-10-11 | Claude Code | Code (**first drafts**) | Drafted `scripts/00_master` and `01`–`11`, `20` (Stata, including `08_hmd_france`) and ran and debugged them. **To do by the team:** read, run and adapt each script; record here who reviewed which |
+| 2026-10-15 | Claude Code | Code (**first drafts**) | Drafted `00_fetch_wdi_archive.py`, `02b_povcal_rebuild.do`, `21_compare_rebuilt.do` and the `rebuilt` switch in `00_master`, `02`, `03`. Method chosen with Ashwath. **To do by the team:** read, run and adapt |
+| 2026-10-15 | Claude Code | Code (**first drafts**); data checks | Compared the GBD 2023 downloads with GBD 2017; drafted `01b_gbd_rebuild.do`, the `MORTALITY` switch in `00_master`, the GBD 2023 names in `01`, the empty-bin fix in `04`, and section 1b of `21`. **To do by the team:** read, run and adapt |
+| 2026-10-15 | Claude Code | Code (restructure); documentation | Merged the step scripts into `replication.do` and `constructed.do` (generated mechanically, then checked: identical tables); wrote both `data/README.md` files. **To do by the team:** read both do-files end to end |
