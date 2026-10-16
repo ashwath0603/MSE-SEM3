@@ -1,0 +1,185 @@
+% =============================================================================
+% replication_section.tex: Section 6 (Replication: tables and figures, each
+% as Panel A = published, Panel B = ours) and Section 7 (Reasons for
+% divergence) of the replication report, "Too Young to Die".
+%
+% DRAFT PROSE. Written by Claude Code at Ashwath's request (16 Oct 2026), to be
+% rewritten by the team in its own words. The course allows AI only for ideas,
+% literature search, code and grammar, and text "generated entirely by external
+% tools" scores zero. Rewrite before submitting, and declare the AI use.
+%
+% Continuity with "Dev Eco.docx" (Sections 1-4) and methodology_section.tex (5).
+% Tables and figures are numbered consecutively in the report (Tables 1-2,
+% Figures 1-7); each Panel A label gives the paper's own number.
+% Panel A images are screenshots of the published paper (writeup/paper_exhibits/).
+%
+% Every number is read from replication_package/output/tables (csv).
+% Build: pdfLaTeX (Overleaf default) or XeLaTeX, from development_economics/writeup/.
+% =============================================================================
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{iftex}
+\ifXeTeX
+  \usepackage{fontspec}
+  \setmainfont{Times New Roman}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage{newtxtext,newtxmath}
+\fi
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\newcommand{\ahat}{\hat{a}}
+\newcommand{\figrep}{../replication_package/output/figures/}
+\newcommand{\figpap}{paper_exhibits/}
+% force the report's numbering: \fignum{5} makes the next figure Figure 5
+\newcommand{\fignum}[1]{\setcounter{figure}{\numexpr#1-1\relax}}
+\newcommand{\tabnum}[1]{\setcounter{table}{\numexpr#1-1\relax}}
+
+\begin{document}
+% Sections 1-5 (Introduction, Related Literature, Conceptual Framework, Data, Methodology) come first
+\setcounter{section}{5}
+
+% #############################################################################
+\section{Replication}\label{sec:replication}
+
+We use the data and the Stata code in the authors' replication package (Section~4). The code runs after small technical changes: file paths, Windows shell commands, and two commands that only display results. We downloaded the one missing dataset, the HMD life tables for France, which required a log-in. This section reports the paper's two empirical tables and its seven figures based on data (Tables~1--2 and Figures~1--7). Each shows the published version in Panel~A, reproduced from Baland, Cassan and Decerf (2021), and our replication in Panel~B.
+
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.47\textwidth]{paper_fig03.png} & \includegraphics[width=0.47\textwidth]{fig03_haiti.pdf}\\
+\small\textit{Panel A. Published (paper Figure 3)} & \small\textit{Panel B. Our replication}\\
+\end{tabular}
+\caption{Haiti: life-span components of ID and GD, $\ahat=5$, 1995--2015}\label{fig:haiti}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\small\textit{Panel A. Published (paper Figure 5)}\\
+\includegraphics[width=0.85\textwidth]{paper_fig05.png}\\[4pt]
+\small\textit{Panel B. Our replication (HMD period life tables)}\\
+\includegraphics[width=0.85\textwidth]{fig05_france.pdf}
+\caption{France: life-span components of ID and GD, $\ahat=40$, and mortality at ages 0 and 20}\label{fig:france}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{World Generated Deprivation in 1990 and 2015, $\ahat=50$, $\gamma=1$}\label{tab:t3}
+\small
+\textit{Panel A. Published (Baland, Cassan and Decerf 2021, Table 3, p.~251)}\\[2pt]
+\includegraphics[width=0.85\textwidth]{paper_table3.png}\\[6pt]
+\textit{Panel B. Our replication}\\[2pt]
+\begin{tabular}{llrr}
+\toprule
+ & Unit & 1990 & 2015\\
+\midrule
+Living population & Person-years (million) & 4,197.9 & 6,007.0\\
+HC & Percent & 44.87 & 11.74\\
+Alive deprivation (PYAD) & Person-years (million) & 1,883.7 & 705.2\\
+Life-span deprivation (PYPL) & Person-years (million) & 701.4 & 402.4\\
+Deprived population & Person-years (million) & 2,585.1 & 1,107.6\\
+Reference population & Person-years (million) & 4,899.3 & 6,409.4\\
+$GD_1$ & Percent & 52.76 & 17.28\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.47\textwidth]{paper_fig06.png} & \includegraphics[width=0.47\textwidth]{fig06_world_decomposition.pdf}\\
+\small\textit{Panel A. Published (paper Figure 6)} & \small\textit{Panel B. Our replication}\\
+\end{tabular}
+\caption{Decomposition of world Generated Deprivation, $\ahat=50$, 1990--2015: income and life-span components, HC, and the life-span share (right axis)}\label{fig:f5}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.47\textwidth]{paper_fig07.png} & \includegraphics[width=0.47\textwidth]{fig07_counterfactuals.pdf}\\
+\small\textit{Panel A. Published (paper Figure 7)} & \small\textit{Panel B. Our replication}\\
+\end{tabular}
+\caption{Counterfactual worlds: the life-span component of GD with 1990 births, 1990 mortality, or both held fixed}\label{fig:f6}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Re-ranking: decomposition of GD in Gabon and Morocco in 1993}\label{tab:t4}
+\small
+\textit{Panel A. Published (Baland, Cassan and Decerf 2021, Table 4, p.~254)}\\[2pt]
+\includegraphics[width=0.85\textwidth]{paper_table4.png}\\[6pt]
+\textit{Panel B. Our replication}\\[2pt]
+\begin{tabular}{llrr}
+\toprule
+ & Unit & Gabon & Morocco\\
+\midrule
+Living population & Person-years (thousand) & 1,043.8 & 26,449.0\\
+HC & Percent & 5.17 & 5.78\\
+Alive deprivation (PYAD) & Person-years (thousand) & 53.9 & 1,527.5\\
+Life-span deprivation (PYPL) & Person-years (thousand) & 173.9 & 3,100.3\\
+Deprived population & Person-years (thousand) & 227.8 & 4,627.8\\
+Reference population & Person-years (thousand) & 1,217.6 & 29,549.3\\
+$GD_1$ & Percent & 18.71 & 15.66\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\small\textit{Panel A. Published (paper Figure 8)}\\
+\includegraphics[width=0.8\textwidth]{paper_fig08.png}\\[4pt]
+\small\textit{Panel B. Our replication}\\
+\includegraphics[width=0.8\textwidth]{fig08_gabon_morocco.pdf}
+\caption{Re-ranking, Gabon and Morocco: HC (left) and GD (right), $\ahat=50$}\label{fig:f7}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\small\textit{Panel A. Published (paper Figure 9)}\\
+\includegraphics[width=0.8\textwidth]{paper_fig09.png}\\[4pt]
+\small\textit{Panel B. Our replication}\\
+\includegraphics[width=0.8\textwidth]{fig09_comoros_botswana.pdf}
+\caption{Diverging trends in GD and HC: Comoros and Botswana, $\ahat=50$}\label{fig:f8}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.45\textwidth]{paper_fig10.png} & \includegraphics[width=0.45\textwidth]{fig10_trend_reversals.pdf}\\
+\small\textit{Panel A. Published (paper Figure 10)} & \small\textit{Panel B. Our replication}\\
+\end{tabular}
+\caption{Deprivation trends: $GD_t/GD_{t-5}$ against $HC_t/HC_{t-5}$, $\ahat=50$ (observations with $HC_t/HC_{t-5}<3$)}\label{fig:f9}
+\end{figure}
+
+% #############################################################################
+\section{Reasons for divergence}\label{sec:divergence}
+
+By a divergence we mean a number printed in the paper that our run of the authors' code does not reproduce, once we allow for the paper's own rounding. We compare 51 numbers from Tables~\ref{tab:t3} and~\ref{tab:t4} and from the text of the paper's empirical section with the output of the code. Thirty-nine of them match, and all seven figures match the published ones in shape and level, apart from one year in the French series (cause~4). The remaining twelve numbers have four causes.
+
+\begin{enumerate}
+  \item Some numbers in the paper misreport what the authors' own code computes. Gabon's GD in Table~\ref{tab:t4} is printed as 17.9\%, but the code gives 18.7\%. The authors calculated this cell by hand and wrote the reference population as 1,271 instead of 1,217. The average change in rank when moving from HC to GD is reported as 4.4 in 1990 and 4.9 in 2015, while the code gives 4.9 and 4.3: the two years are swapped. This reverses the paper's statement that re-rankings grow over time. Several other cells of Tables~\ref{tab:t3} and~\ref{tab:t4} differ in the last digit for a similar reason, because the authors filled them in by hand from rounded rows. In all these cases the code is correct, and the error lies in how the results were transcribed.
+
+  \item Some numbers in the text are not computed anywhere in the authors' code, so we cannot see how the authors defined them. This applies to the median age at death, the newborn mortality rates for 1990 and 2015, and the growth in births. Our values are close to the published ones but not equal after rounding, which points to small differences in definition. For the median age at death, our median over 1990--2015 is 58 rather than 64, but the yearly median reaches 64 in the last years of the period, so the paper most likely reports a recent year. None of these gaps affects the paper's argument.
+
+  \item Some numbers describe a change between two years, and these depend on exactly which years are compared. This applies to the changes in HC and GD for Comoros and Botswana and to Botswana's HC in 2000, which is interpolated between PovCalNet's reference years. Our values differ from the published ones by less than two percentage points, and no choice of start and end years reproduces all of them at once. The direction of each change is the same as in the paper: in both countries, HC and GD move in opposite directions, which is the purpose of the example.
+
+  \item Finally, some differences come from how the data are handled. The authors join the poverty and mortality data by country name, which drops three eligible countries, so the sample has 113 countries rather than 116; we keep 113 to match the paper. Rankings among the countries with almost no poverty depend on how ties are broken, which the authors' code does at random; this explains small differences in rank statistics. For France (Figure~\ref{fig:france}), the figure has to be drawn from period rather than cohort life tables, and today's version of the Human Mortality Database dates one historical change a year later than the authors' version.
+\end{enumerate}
+
+None of these divergences comes from the data or from errors in the code. Only one changes a conclusion of the paper: re-rankings between HC and GD become smaller over time, not larger. The main results all replicate.
+
+\end{document}

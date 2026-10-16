@@ -1,0 +1,90 @@
+% =============================================================================
+% methodology_section.tex: Section 5 (Methodology) of the replication report,
+% "Too Young to Die". Comes after Section 4 (Data) of "Dev Eco.docx" and before
+% replication_section.tex (Sections 6-7).
+%
+% DRAFT PROSE. Written by Claude Code at Ashwath's request (16 Oct 2026), to be
+% rewritten by the team in its own words. The course allows AI only for ideas,
+% literature search, code and grammar, and text "generated entirely by external
+% tools" scores zero. Rewrite before submitting, and declare the AI use.
+%
+% Equations (1)-(3) are the paper's, in its notation (pp. 231, 233-234).
+% No exhibits here: the paper's data-free Tables 1-2 and simulated Figures 2
+% and 4 are not replicated in the report; Haiti and France are in Section 6.
+% =============================================================================
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{iftex}
+\ifXeTeX
+  \usepackage{fontspec}
+  \setmainfont{Times New Roman}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage{newtxtext,newtxmath}
+\fi
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\newcommand{\ahat}{\hat{a}}
+% force the report's numbering: \fignum{1} makes the next figure Figure 1
+\newcommand{\fignum}[1]{\setcounter{figure}{\numexpr#1-1\relax}}
+\newcommand{\tabnum}[1]{\setcounter{table}{\numexpr#1-1\relax}}
+
+\begin{document}
+% Sections 1-4 (Introduction, Related Literature, Conceptual Framework, Data) come first
+\setcounter{section}{4}
+
+% #############################################################################
+\section{Methodology}\label{sec:methodology}
+
+This section writes the two indexes down formally and explains how we compute them from the data described in Section~4. The intuition behind the indexes is set out in Section~3.
+
+% =============================================================================
+\subsection{The two indexes}\label{sec:meth-indexes}
+
+Consider a society in period $t$. Let $f(x)$ be the number of people who are alive and not poor, $p(x)$ the number who are alive and poor, and $d(x)$ the number who are prematurely dead, that is, born less than $\ahat$ years before $t$ and already dead. The head-count ratio is $HC = p(x)/[f(x)+p(x)]$, so it counts only the living. The Inherited Deprivation index adds the prematurely dead to both the numerator and the denominator:
+\begin{equation}\label{eq:id}
+ID_{\gamma}(x) = \frac{p(x)}{f(x)+p(x)+d(x)} + \gamma\,\frac{d(x)}{f(x)+p(x)+d(x)}.
+\end{equation}
+The first term is alive deprivation and the second is life-span deprivation. Both share one denominator, the reference population, and $\gamma$ is the weight of a period lost to early death relative to a period spent in poverty.
+
+ID needs the deaths of every cohort over the past $\ahat$ years. The Generated Deprivation index uses current mortality instead. It replaces the prematurely dead $d(x)$ with the person-years lost through deaths in period $t$:
+\begin{equation}\label{eq:gd}
+GD_{\gamma}(x,\mu) = \frac{p(x)}{f(x)+p(x)+d^{GD}(x,\mu)} + \gamma\,\frac{d^{GD}(x,\mu)}{f(x)+p(x)+d^{GD}(x,\mu)},
+\end{equation}
+where
+\begin{equation}\label{eq:dgd}
+d^{GD}(x,\mu) = \sum_{a=0}^{\ahat-1} n_a(x)\,\mu_a\,\bigl(\ahat-(a+1)\bigr).
+\end{equation}
+Here $n_a(x)$ is the number of people alive at age $a$ in period $t$ and $\mu_a$ the share of them who die in that period. Both indexes reduce to the head-count ratio when nobody dies before $\ahat$. In a stationary population, where births and death rates are constant, $d^{GD}$ equals $d$ and the two indexes coincide.
+
+Equation~(\ref{eq:dgd}) dates each death at the end of the period, so a death at age $a$ removes $\ahat-(a+1)$ years. In the empirical part, the paper dates deaths at the start of the year instead (its footnote~3), so a death at age $a$ removes $\ahat-a$ years, and a newborn who dies removes exactly $\ahat$. The authors' code follows this convention, and so do we.
+
+% =============================================================================
+\subsection{From data to indexes}\label{sec:meth-data}
+
+We compute GD for every country and year, as the paper does. GBD gives deaths and death rates by age group, from which we recover the population of each group and split it into single years of age (Section~4). For each country and year, let $L_t$ be the population alive at the end of the year, $D_{a,t}$ the deaths at age $a$, and $HC_t$ the head-count ratio from PovCalNet. Poverty is only observed for the country as a whole, so the head-count ratio applies to everyone alive. Alive deprivation is $PYAD_t = HC_t\,L_t$, life-span deprivation is
+\begin{equation}\label{eq:pypl}
+PYPL_t = \sum_{a=0}^{\ahat-1} D_{a,t}\,(\ahat-a),
+\end{equation}
+and
+\begin{equation}\label{eq:gdt}
+GD_t = \frac{PYAD_t + \gamma\,PYPL_t}{L_t + PYPL_t}.
+\end{equation}
+The denominator $L_t + PYPL_t$ is the reference population of Table~1 in Section~6. Regional and world values add up deaths and population by age across countries, and weight each country's head-count ratio by its population.
+
+ID needs a history of deaths. A death at age $a$ in year $t$ stays in the ID count until the year the person would have turned $\ahat$. Because GBD starts in 1990, ID can only be computed from $1990+\ahat$ onwards. With GBD data the paper therefore uses it only for Haiti, with $\ahat=5$ from 1995. For France, the HMD data reach back far enough to compute ID with $\ahat=40$. Figures~1 and~2 in Section~6 report both cases.
+
+Three further calculations follow the paper. Countries are ranked from least to most deprived, by HC and by GD, and the average absolute difference between the two ranks measures how much the choice of index matters. A reversal is a five-year period in which GD and HC move in opposite directions, that is, in which $GD_t/GD_{t-5}$ and $HC_t/HC_{t-5}$ lie on opposite sides of one. Finally, to see what drives the fall in life-span deprivation, Figure~4 recomputes the world series with births, age-specific death rates, or both held at their 1990 values.
+
+\end{document}
